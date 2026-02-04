@@ -95,6 +95,29 @@ h2 { font-weight: 600; font-size: 1.5rem; color: var(--text-secondary); margin-b
     to { opacity: 1; }
 }
 
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .card {
+        grid-column: span 1 !important;
+    }
+    h1 { font-size: 1.8rem; }
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .task-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    #task-modal .card {
+        width: 95%;
+        margin: 10px;
+    }
+}
+
 /* Login */
 .login-box {
     text-align: center;

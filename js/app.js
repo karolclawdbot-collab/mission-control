@@ -28,7 +28,7 @@ window.saveNewTask = function() {
     }
 
     const newTask = {
-        id: Date.now(),
+        id: 'manual_' + Date.now(),
         text: text,
         priority: priority,
         status: 'In Progress'
@@ -41,6 +41,33 @@ window.saveNewTask = function() {
     document.getElementById('new-task-text').value = '';
     hideAddTask();
     loadDashboardData();
+}
+
+window.deleteTask = function(id) {
+    if (!id.toString().startsWith('manual_')) {
+        alert("Systémové úlohy nie je možné vymazať manuálne.");
+        return;
+    }
+    if (confirm("Naozaj chcete vymazať túto úlohu?")) {
+        let localTasks = JSON.parse(localStorage.getItem('kmc_manual_tasks') || '[]');
+        localTasks = localTasks.filter(t => t.id.toString() !== id.toString());
+        localStorage.setItem('kmc_manual_tasks', JSON.stringify(localTasks));
+        loadDashboardData();
+    }
+}
+
+window.toggleTaskStatus = function(id) {
+    if (!id.toString().startsWith('manual_')) {
+        alert("Status systémových úloh sa mení automaticky.");
+        return;
+    }
+    let localTasks = JSON.parse(localStorage.getItem('kmc_manual_tasks') || '[]');
+    const task = localTasks.find(t => t.id.toString() === id.toString());
+    if (task) {
+        task.status = task.status === 'Completed' ? 'In Progress' : 'Completed';
+        localStorage.setItem('kmc_manual_tasks', JSON.stringify(localTasks));
+        loadDashboardData();
+    }
 }
 
 // Display Date
@@ -74,10 +101,20 @@ async function loadDashboardData() {
         if (taskList) {
             taskList.innerHTML = allTasks.map(task => `
                 <div class="task-item">
-                    <span class="priority-tag priority-${task.priority.toLowerCase()}">${task.priority}</span>
-                    <span style="${task.status === 'Completed' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
-                        ${task.text}
-                    </span>
+                    <div style="flex: 1; display: flex; align-items: center;">
+                        <span class="priority-tag priority-${task.priority.toLowerCase()}">${task.priority}</span>
+                        <span style="${task.status === 'Completed' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
+                            ${task.text}
+                        </span>
+                    </div>
+                    <div class="task-actions" style="display: flex; gap: 10px;">
+                        <button onclick="toggleTaskStatus('${task.id}')" style="width: auto; padding: 5px 10px; background: transparent; border: 1px solid #444; font-size: 0.7rem;">
+                            ${task.status === 'Completed' ? 'Vrátiť' : 'Hotovo'}
+                        </button>
+                        <button onclick="deleteTask('${task.id}')" style="width: auto; padding: 5px 10px; background: rgba(255, 69, 58, 0.2); color: #ff453a; font-size: 0.7rem;">
+                            Vymazať
+                        </button>
+                    </div>
                 </div>
             `).join('');
         }
