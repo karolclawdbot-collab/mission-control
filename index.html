@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karol Mission Control</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
+            <div>
+                <h1>Karol Mission Control</h1>
+                <p id="date-string" style="color: #8e8e93;"></p>
+            </div>
+            <button onclick="logout()" style="width: auto; padding: 10px 20px; background: #3a3a3c;">Odhlásiť</button>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Vitals Card -->
+            <div class="card" id="vitals-card">
+                <h2>Systémový stav</h2>
+                <div class="vitals-item">
+                    <span class="vitals-label">Karol Status</span>
+                    <span class="vitals-value"><span class="status-indicator"></span> Online</span>
+                </div>
+                <div class="vitals-item">
+                    <span class="vitals-label">Uptime</span>
+                    <span class="vitals-value" id="uptime-val">1h 15m</span>
+                </div>
+                <div class="vitals-item">
+                    <span class="vitals-label">RAM</span>
+                    <span class="vitals-value" id="ram-val">5.4 GB</span>
+                </div>
+            </div>
+
+            <!-- Tasks Card -->
+            <div class="card" style="grid-column: span 2;">
+                <h2>Aktuálne úlohy</h2>
+                <div id="task-list">
+                    <!-- Tasks injected by JS -->
+                </div>
+            </div>
+
+            <!-- Projects Card -->
+            <div class="card">
+                <h2>Projekty</h2>
+                <div id="project-list">
+                    <!-- Projects injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

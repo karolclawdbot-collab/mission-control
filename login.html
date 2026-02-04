@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Karol Mission Control</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-box">
+        <h1>Mission Control</h1>
+        <p style="color: #8e8e93; margin-bottom: 30px;">Zadajte prístupový kód</p>
+        <div class="input-group">
+            <input type="password" id="passkey" placeholder="••••••••">
+        </div>
+        <button onclick="checkAuth()">Vstúpiť</button>
+        <p id="error" style="color: #ff453a; margin-top: 15px; display: none;">Nesprávny kód.</p>
+    </div>
+
+    <script>
+        function checkAuth() {
+            const pass = document.getElementById('passkey').value;
+            // Pre tento test je kod "dante123"
+            if (pass === 'dante123') {
+                localStorage.setItem('kmc_auth', 'true');
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

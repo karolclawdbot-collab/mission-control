@@ -1,0 +1,42 @@
+{
+    "vitals": {
+        "status": "Online",
+        "uptime": "1h 15m",
+        "memory": "5.4 GB used / 16 GB",
+        "node_id": "LAPTOP-5E18BCCL"
+    },
+    "projects": [
+        {
+            "name": "webik",
+            "url": "https://github.com/karolclawdbot-collab/webik",
+            "status": "Active",
+            "description": "Apple-style single product landing page."
+        },
+        {
+            "name": "Karol Mission Control",
+            "url": "#",
+            "status": "In Development",
+            "description": "Custom management dashboard."
+        }
+    ],
+    "tasks": [
+        {
+            "id": 1,
+            "text": "Dokončiť základnú kostru Dashboardu",
+            "priority": "High",
+            "status": "In Progress"
+        },
+        {
+            "id": 2,
+            "text": "Nastaviť GitHub Pages pre Webik",
+            "priority": "Medium",
+            "status": "Completed"
+        },
+        {
+            "id": 3,
+            "text": "Stabilizovať Browser Relay spojenie",
+            "priority": "High",
+            "status": "Completed"
+        }
+    ]
+}
