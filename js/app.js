@@ -1,7 +1,9 @@
 // Supabase Configuration
 const SUPABASE_URL = 'https://zbbjwmlcuuuuwpyuajxs.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiYmp3bWxjdXV1dXdweXVhanhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxNDQ5MzEsImV4cCI6MjA4NTcyMDkzMX0.4rXBAtNlGzCEQJrZS7L1bEpPqpBkd_L3_2HRZ8qceAs';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Bug fix: rename variable to avoid shadowing global 'supabase' object
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Auth Check
 if (localStorage.getItem('kmc_auth') !== 'true' && !window.location.href.includes('login.html')) {
@@ -33,7 +35,7 @@ window.saveNewTask = async function() {
         return;
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('tasks')
         .insert([{ text, priority, status: 'In Progress' }]);
 
@@ -49,7 +51,7 @@ window.saveNewTask = async function() {
 
 window.deleteTask = async function(id) {
     if (confirm("Naozaj chcete vymazať túto úlohu?")) {
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('tasks')
             .delete()
             .eq('id', id);
@@ -61,7 +63,7 @@ window.deleteTask = async function(id) {
 
 window.toggleTaskStatus = async function(id, currentStatus) {
     const newStatus = currentStatus === 'Completed' ? 'In Progress' : 'Completed';
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('tasks')
         .update({ status: newStatus })
         .eq('id', id);
@@ -81,8 +83,8 @@ if (dateEl) {
 // Load Data
 async function loadDashboardData() {
     try {
-        // Fetch tasks from Supabase
-        const { data: tasks, error: taskError } = await supabase
+        console.log("Loading tasks from Supabase...");
+        const { data: tasks, error: taskError } = await supabaseClient
             .from('tasks')
             .select('*')
             .order('created_at', { ascending: false });
@@ -91,11 +93,14 @@ async function loadDashboardData() {
 
         // Fetch static data (vitals, projects) from local JSON for now
         const response = await fetch('data/tasks.json');
-        const staticData = await response.json();
+        let staticData = { vitals: {}, projects: [] };
+        if (response.ok) {
+            staticData = await response.json();
+        }
 
         // Update Vitals
-        if (document.getElementById('uptime-val')) document.getElementById('uptime-val').innerText = staticData.vitals.uptime;
-        if (document.getElementById('ram-val')) document.getElementById('ram-val').innerText = staticData.vitals.memory;
+        if (document.getElementById('uptime-val')) document.getElementById('uptime-val').innerText = staticData.vitals.uptime || 'N/A';
+        if (document.getElementById('ram-val')) document.getElementById('ram-val').innerText = staticData.vitals.memory || 'N/A';
 
         // Render Tasks
         const taskList = document.getElementById('task-list');
@@ -138,7 +143,7 @@ async function loadDashboardData() {
 }
 
 // Subscription for Realtime
-supabase
+supabaseClient
   .channel('tasks_channel')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, payload => {
     console.log('Change received!', payload);
