@@ -9,9 +9,15 @@ window.logout = function() {
     window.location.href = 'login.html';
 }
 
-window.showAddTask = function() {
+window.showAddTask = function(e) {
+    if (e) e.preventDefault();
     console.log("Opening modal...");
-    document.getElementById('task-modal').style.display = 'flex';
+    const modal = document.getElementById('task-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Focus input
+        setTimeout(() => document.getElementById('new-task-text').focus(), 100);
+    }
 }
 
 window.hideAddTask = function() {

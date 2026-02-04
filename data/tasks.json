@@ -1,8 +1,8 @@
 {
     "vitals": {
         "status": "Online",
-        "uptime": "1h 15m",
-        "memory": "5.4 GB used / 16 GB",
+        "uptime": "2h 30m",
+        "memory": "5.2 GB used / 16 GB",
         "node_id": "LAPTOP-5E18BCCL"
     },
     "projects": [
@@ -13,16 +13,22 @@
             "description": "Apple-style single product landing page."
         },
         {
+            "name": "diplomovka-2026",
+            "url": "https://github.com/karolclawdbot-collab/diplomovka-2026",
+            "status": "Active",
+            "description": "Hlavný repozitár pre diplomovú prácu."
+        },
+        {
             "name": "Karol Mission Control",
-            "url": "#",
-            "status": "In Development",
+            "url": "https://github.com/karolclawdbot-collab/mission-control",
+            "status": "Active",
             "description": "Custom management dashboard."
         }
     ],
     "tasks": [
         {
             "id": 1,
-            "text": "Dokončiť základnú kostru Dashboardu",
+            "text": "Vytvoriť štruktúru diplomovky",
             "priority": "High",
             "status": "In Progress"
         },
