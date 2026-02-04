@@ -83,7 +83,17 @@ h2 { font-weight: 600; font-size: 1.5rem; color: var(--text-secondary); margin-b
     text-transform: uppercase;
 }
 .priority-high { background: rgba(255, 69, 58, 0.2); color: #ff453a; }
-.priority-medium { background: rgba(255, 159, 10, 0.2); color: #ff9f0a; }
+.priority-low { background: rgba(48, 209, 88, 0.2); color: #30d158; }
+
+.modal {
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
 /* Login */
 .login-box {

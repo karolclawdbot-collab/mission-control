@@ -17,7 +17,11 @@ document.getElementById('date-string').innerText = new Date().toLocaleDateString
 async function loadDashboardData() {
     try {
         const response = await fetch('data/tasks.json');
-        const data = await response.json();
+        let data = await response.json();
+
+        // Merge with local tasks (for manual additions)
+        const localTasks = JSON.parse(localStorage.getItem('kmc_manual_tasks') || '[]');
+        const allTasks = [...data.tasks, ...localTasks];
 
         // Update Vitals
         document.getElementById('uptime-val').innerText = data.vitals.uptime;
@@ -25,7 +29,7 @@ async function loadDashboardData() {
 
         // Render Tasks
         const taskList = document.getElementById('task-list');
-        taskList.innerHTML = data.tasks.map(task => `
+        taskList.innerHTML = allTasks.map(task => `
             <div class="task-item">
                 <span class="priority-tag priority-${task.priority.toLowerCase()}">${task.priority}</span>
                 <span style="${task.status === 'Completed' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
@@ -47,6 +51,39 @@ async function loadDashboardData() {
     } catch (error) {
         console.error('Chyba pri načítaní dát:', error);
     }
+}
+
+// Modal Logic
+function showAddTask() {
+    document.getElementById('task-modal').style.display = 'flex';
+}
+
+function hideAddTask() {
+    document.getElementById('task-modal').style.display = 'none';
+}
+
+function saveNewTask() {
+    const text = document.getElementById('new-task-text').value;
+    const priority = document.getElementById('new-task-priority').value;
+
+    if (!text) return;
+
+    const newTask = {
+        id: Date.now(),
+        text: text,
+        priority: priority,
+        status: 'In Progress'
+    };
+
+    const localTasks = JSON.parse(localStorage.getItem('kmc_manual_tasks') || '[]');
+    localTasks.push(newTask);
+    localStorage.setItem('kmc_manual_tasks', JSON.stringify(localTasks));
+
+    hideAddTask();
+    loadDashboardData();
+    
+    // Signal to Karol (via console or similar)
+    console.log("TASK_ADDED_MANUALLY");
 }
 
 loadDashboardData();
